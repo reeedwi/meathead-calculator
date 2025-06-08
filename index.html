@@ -27,13 +27,16 @@
     <div class="container">
         <header>
             <h1 class="title">Meathead Calculator</h1>
-            <p class="description">
-                You don't have time to do math! Or the ability! Just enter in your weight and find out what you need on each side of the bar.
-            </p>
         </header>
         
         <main>
             <div class="calculator-section">
+                <div id="result-output" class="result-output" role="status" aria-live="polite">
+                    Enter a weight to see the calculation
+                </div>
+                
+                <div id="error-message" class="error-message" role="alert" aria-live="polite"></div>
+                
                 <label for="weight-input" class="input-label">Enter total barbell weight (lbs):</label>
                 <input 
                     type="number" 
@@ -46,16 +49,13 @@
                     aria-describedby="result-output error-message"
                     autocomplete="off"
                 >
-                
-                <div id="error-message" class="error-message" role="alert" aria-live="polite"></div>
-                
-                <div id="result-output" class="result-output" role="status" aria-live="polite">
-                    Enter a weight to see the calculation
-                </div>
             </div>
         </main>
         
         <footer>
+            <p class="description">
+                You don't have time to do math! Or the ability! Just enter in your weight and find out what you need on each side of the bar.
+            </p>
             <p class="footer-text">Assumes standard 45 lb Olympic barbell</p>
             <p class="footer-text" style="margin-top: 1rem; opacity: 0.3; font-size: 0.8rem;">
                 <a href="./debug.html" style="color: inherit; text-decoration: none;">🔧 Debug PWA</a>
