@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Debug - Meathead Calculator</title>
+    <style>
+        body {
+            font-family: monospace;
+            margin: 20px;
+            background: #f0f0f0;
+        }
+        .debug-section {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #007acc;
+        }
+        .error { border-left-color: #ff4444; }
+        .success { border-left-color: #44ff44; }
+        pre {
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+        button {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .logs {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #222;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 PWA Debug Tool</h1>
+    
+    <div class="debug-section">
+        <h3>Current Environment</h3>
+        <pre id="environment"></pre>
+    </div>
+    
+    <div class="debug-section">
+        <h3>Service Worker Status</h3>
+        <div id="sw-status"></div>
+        <button onclick="registerSW()">Register Service Worker</button>
+        <button onclick="unregisterSW()">Unregister All</button>
+    </div>
+    
+    <div class="debug-section">
+        <h3>Manifest Check</h3>
+        <div id="manifest-status"></div>
+        <button onclick="checkManifest()">Check Manifest</button>
+    </div>
+    
+    <div class="debug-section">
+        <h3>File Accessibility Test</h3>
+        <div id="files-status"></div>
+        <button onclick="testFiles()">Test All Files</button>
+    </div>
+    
+    <div class="debug-section">
+        <h3>PWA Install</h3>
+        <div id="install-status"></div>
+        <button id="install-btn" onclick="installPWA()" style="display: none;">Install PWA</button>
+    </div>
+    
+    <div class="debug-section">
+        <h3>Console Logs</h3>
+        <div class="logs" id="logs"></div>
+        <button onclick="clearLogs()">Clear Logs</button>
+    </div>
+    
+    <div class="debug-section">
+        <h3>Quick Links</h3>
+        <a href="./index.html">← Back to Meathead Calculator</a>
+    </div>
+
+    <script>
+        // Capture console logs
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        function addLog(message, type = 'log') {
+            const logs = document.getElementById('logs');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `<span style="color: #888">[${timestamp}]</span> <span style="color: ${type === 'error' ? '#ff6b6b' : type === 'warn' ? '#ffd93d' : '#6bcf7f'}">${type.toUpperCase()}</span>: ${message}`;
+            logs.appendChild(logEntry);
+            logs.scrollTop = logs.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addLog(args.join(' '), 'log');
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addLog(args.join(' '), 'error');
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            addLog(args.join(' '), 'warn');
+        };
+
+        // Show environment info
+        function showEnvironment() {
+            const env = {
+                'Current URL': window.location.href,
+                'Origin': window.location.origin,
+                'Pathname': window.location.pathname,
+                'Protocol': window.location.protocol,
+                'User Agent': navigator.userAgent.substring(0, 100) + '...',
+                'SW Supported': 'serviceWorker' in navigator,
+                'Manifest Supported': 'BeforeInstallPromptEvent' in window,
+                'Cache Supported': 'caches' in window
+            };
+            
+            let envText = '';
+            for (const [key, value] of Object.entries(env)) {
+                envText += `${key}: ${value}\n`;
+            }
+            document.getElementById('environment').textContent = envText;
+        }
+
+        // Service Worker functions
+        async function registerSW() {
+            if ('serviceWorker' in navigator) {
+                try {
+                    console.log('Attempting to register service worker...');
+                    const registration = await navigator.serviceWorker.register('./sw.js');
+                    console.log('SW registered successfully:', registration);
+                    updateSWStatus();
+                } catch (error) {
+                    console.error('SW registration failed:', error);
+                    updateSWStatus();
+                }
+            } else {
+                console.error('Service Worker not supported');
+                updateSWStatus();
+            }
+        }
+
+        async function unregisterSW() {
+            if ('serviceWorker' in navigator) {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                for (const registration of registrations) {
+                    await registration.unregister();
+                    console.log('Unregistered SW:', registration);
+                }
+                updateSWStatus();
+            }
+        }
+
+        async function updateSWStatus() {
+            const statusDiv = document.getElementById('sw-status');
+            if ('serviceWorker' in navigator) {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                if (registrations.length > 0) {
+                    statusDiv.innerHTML = `<div class="success">✅ ${registrations.length} Service Worker(s) registered</div>`;
+                    registrations.forEach((reg, index) => {
+                        statusDiv.innerHTML += `<div>SW ${index + 1}: ${reg.scope}</div>`;
+                    });
+                } else {
+                    statusDiv.innerHTML = `<div class="error">❌ No Service Workers registered</div>`;
+                }
+            } else {
+                statusDiv.innerHTML = `<div class="error">❌ Service Worker not supported</div>`;
+            }
+        }
+
+        // Manifest check
+        async function checkManifest() {
+            const statusDiv = document.getElementById('manifest-status');
+            try {
+                const response = await fetch('./manifest.json');
+                if (response.ok) {
+                    const manifest = await response.json();
+                    statusDiv.innerHTML = `<div class="success">✅ Manifest loaded successfully</div>`;
+                    statusDiv.innerHTML += `<pre>${JSON.stringify(manifest, null, 2)}</pre>`;
+                } else {
+                    statusDiv.innerHTML = `<div class="error">❌ Manifest failed to load: ${response.status}</div>`;
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="error">❌ Manifest error: ${error.message}</div>`;
+            }
+        }
+
+        // Test file accessibility
+        async function testFiles() {
+            const files = ['./index.html', './styles.css', './script.js', './manifest.json', './sw.js'];
+            const statusDiv = document.getElementById('files-status');
+            statusDiv.innerHTML = '<div>Testing files...</div>';
+            
+            const results = [];
+            for (const file of files) {
+                try {
+                    const response = await fetch(file);
+                    const status = response.ok ? '✅' : '❌';
+                    results.push(`${status} ${file} - ${response.status} ${response.statusText}`);
+                } catch (error) {
+                    results.push(`❌ ${file} - Error: ${error.message}`);
+                }
+            }
+            
+            statusDiv.innerHTML = results.map(result => `<div>${result}</div>`).join('');
+        }
+
+        // PWA install
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('install-btn').style.display = 'block';
+            document.getElementById('install-status').innerHTML = '<div class="success">✅ PWA install prompt available</div>';
+            console.log('Install prompt available');
+        });
+
+        async function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User ${outcome} the install prompt`);
+                document.getElementById('install-status').innerHTML += `<div>User ${outcome} the install</div>`;
+                deferredPrompt = null;
+                document.getElementById('install-btn').style.display = 'none';
+            }
+        }
+
+        function clearLogs() {
+            document.getElementById('logs').innerHTML = '';
+        }
+
+        // Initialize
+        showEnvironment();
+        updateSWStatus();
+        
+        // Auto-register service worker
+        setTimeout(registerSW, 1000);
+    </script>
+</body>
+</html> 

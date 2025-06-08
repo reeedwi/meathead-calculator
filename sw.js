@@ -1,15 +1,25 @@
 // Service Worker for Meathead Calculator PWA
-const CACHE_NAME = 'meathead-calculator-v2';
+const CACHE_NAME = 'meathead-calculator-v3';
 
-// Dynamically determine the base path
-const basePath = self.location.pathname.replace('/sw.js', '');
+// Get the base path from the service worker location
+const getBasePath = () => {
+    const swPath = self.location.pathname;
+    return swPath.substring(0, swPath.lastIndexOf('/'));
+};
+
+const basePath = getBasePath();
+console.log('Service Worker base path:', basePath);
+
 const urlsToCache = [
     basePath + '/',
     basePath + '/index.html',
-    basePath + '/styles.css',
+    basePath + '/styles.css', 
     basePath + '/script.js',
-    basePath + '/manifest.json'
+    basePath + '/manifest.json',
+    basePath + '/debug.html'
 ];
+
+console.log('URLs to cache:', urlsToCache);
 
 // Install event - cache resources
 self.addEventListener('install', event => {
@@ -18,7 +28,29 @@ self.addEventListener('install', event => {
         caches.open(CACHE_NAME)
             .then(cache => {
                 console.log('Service Worker: Caching files');
-                return cache.addAll(urlsToCache);
+                console.log('Cache name:', CACHE_NAME);
+                console.log('URLs to cache:', urlsToCache);
+                
+                // Cache files one by one to identify any failing requests
+                return Promise.all(
+                    urlsToCache.map(url => {
+                        return fetch(url)
+                            .then(response => {
+                                if (response.ok) {
+                                    console.log('Successfully fetched:', url);
+                                    return cache.put(url, response);
+                                } else {
+                                    console.error('Failed to fetch:', url, 'Status:', response.status);
+                                    throw new Error(`Failed to fetch ${url}: ${response.status}`);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error caching:', url, error);
+                                // Don't let one failed cache prevent the rest
+                                return Promise.resolve();
+                            });
+                    })
+                );
             })
             .then(() => {
                 console.log('Service Worker: Installation complete');
@@ -27,6 +59,7 @@ self.addEventListener('install', event => {
             })
             .catch(error => {
                 console.error('Service Worker: Installation failed', error);
+                throw error;
             })
     );
 });
