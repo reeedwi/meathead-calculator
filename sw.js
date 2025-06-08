@@ -1,5 +1,5 @@
 // Service Worker for Meathead Calculator PWA
-const CACHE_NAME = 'meathead-calculator-v3';
+const CACHE_NAME = 'meathead-calculator-v4';
 
 // Get the base path from the service worker location
 const getBasePath = () => {
@@ -16,7 +16,9 @@ const urlsToCache = [
     basePath + '/styles.css', 
     basePath + '/script.js',
     basePath + '/manifest.json',
-    basePath + '/debug.html'
+    basePath + '/debug.html',
+    basePath + '/icon-192.png',
+    basePath + '/icon-512.png'
 ];
 
 console.log('URLs to cache:', urlsToCache);
