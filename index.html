@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meathead Calculator</title>
+    <meta name="description" content="Calculate the weight to load on each side of your barbell instantly. No math required!">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Meathead Calculator">
+    
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏋️</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏋️</text></svg>">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="title">Meathead Calculator</h1>
+            <p class="description">
+                You don't have time to do math! Or the ability! Just enter in your weight and find out what you need on each side of the bar.
+            </p>
+        </header>
+        
+        <main>
+            <div class="calculator-section">
+                <label for="weight-input" class="input-label">Enter total barbell weight (lbs):</label>
+                <input 
+                    type="number" 
+                    id="weight-input" 
+                    class="weight-input" 
+                    min="45" 
+                    max="999" 
+                    step="1" 
+                    placeholder="225"
+                    aria-describedby="result-output error-message"
+                    autocomplete="off"
+                >
+                
+                <div id="error-message" class="error-message" role="alert" aria-live="polite"></div>
+                
+                <div id="result-output" class="result-output" role="status" aria-live="polite">
+                    Enter a weight to see the calculation
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p class="footer-text">Assumes standard 45 lb Olympic barbell</p>
+        </footer>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html> 
