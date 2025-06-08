@@ -1,11 +1,14 @@
 // Service Worker for Meathead Calculator PWA
-const CACHE_NAME = 'meathead-calculator-v1';
+const CACHE_NAME = 'meathead-calculator-v2';
+
+// Dynamically determine the base path
+const basePath = self.location.pathname.replace('/sw.js', '');
 const urlsToCache = [
-    '/',
-    '/index.html',
-    '/styles.css',
-    '/script.js',
-    '/manifest.json'
+    basePath + '/',
+    basePath + '/index.html',
+    basePath + '/styles.css',
+    basePath + '/script.js',
+    basePath + '/manifest.json'
 ];
 
 // Install event - cache resources
@@ -96,7 +99,7 @@ self.addEventListener('fetch', event => {
                         // If it's a navigation request and we're offline, 
                         // return the cached index.html
                         if (event.request.mode === 'navigate') {
-                            return caches.match('/index.html');
+                            return caches.match(basePath + '/index.html');
                         }
                         
                         throw error;

@@ -169,14 +169,18 @@ document.addEventListener('DOMContentLoaded', () => {
 // Register service worker for PWA functionality
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
+        console.log('Registering service worker...');
+        navigator.serviceWorker.register('./sw.js')
             .then(registration => {
-                console.log('SW registered: ', registration);
+                console.log('SW registered successfully: ', registration);
+                console.log('SW scope: ', registration.scope);
             })
             .catch(registrationError => {
-                console.log('SW registration failed: ', registrationError);
+                console.error('SW registration failed: ', registrationError);
             });
     });
+} else {
+    console.log('Service Worker not supported');
 }
 
 // Handle installation prompt for PWA
