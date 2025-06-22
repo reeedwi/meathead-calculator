@@ -125,6 +125,98 @@ body {
     font-size: clamp(1.1rem, 3vw, 1.4rem);
 }
 
+/* Plate inventory section */
+.plate-inventory-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 2px solid #000000;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+}
+
+.section-title {
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.section-description {
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    margin-bottom: 1.5rem;
+    opacity: 0.7;
+}
+
+.plate-inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.plate-input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.plate-label {
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    font-weight: 600;
+    text-align: center;
+}
+
+.plate-input {
+    width: 80px;
+    height: 50px;
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
+    font-weight: 600;
+    text-align: center;
+    border: 2px solid #000000;
+    background-color: #ffffff;
+    color: #000000;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.plate-input:focus {
+    outline: none;
+    border-color: #000000;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    transform: scale(1.05);
+}
+
+.plate-help {
+    font-size: clamp(0.8rem, 2vw, 0.9rem);
+    opacity: 0.6;
+    font-weight: 400;
+}
+
+.plate-breakdown {
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    font-weight: 600;
+    padding: 1rem;
+    border: 2px solid #000000;
+    border-radius: 6px;
+    background-color: #ffffff;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.plate-breakdown.empty {
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: 400;
+}
+
+.plate-breakdown.error {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+
 /* Footer */
 .footer-text {
     font-size: clamp(0.9rem, 2.5vw, 1rem);
@@ -157,6 +249,26 @@ body {
     .calculator-section {
         margin-bottom: 1.5rem;
     }
+    
+    .plate-inventory-section {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .plate-inputs {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+    
+    .plate-input {
+        width: 70px;
+        height: 45px;
+    }
+    
+    .plate-breakdown {
+        min-height: 50px;
+        padding: 0.75rem;
+    }
 }
 
 /* High contrast mode support */
@@ -172,22 +284,38 @@ body {
     .error-message:not(:empty) {
         border-width: 3px;
     }
+    
+    .plate-inventory-section {
+        border-width: 3px;
+    }
+    
+    .plate-input {
+        border-width: 3px;
+    }
+    
+    .plate-breakdown {
+        border-width: 3px;
+    }
 }
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
     .weight-input,
-    .result-output {
+    .result-output,
+    .plate-input,
+    .plate-breakdown {
         transition: none;
     }
     
-    .weight-input:focus {
+    .weight-input:focus,
+    .plate-input:focus {
         transform: none;
     }
 }
 
 /* Focus styles for keyboard navigation */
-.weight-input:focus-visible {
+.weight-input:focus-visible,
+.plate-input:focus-visible {
     outline: 3px solid #000000;
     outline-offset: 2px;
 }

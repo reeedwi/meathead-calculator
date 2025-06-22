@@ -50,6 +50,51 @@
                     autocomplete="off"
                 >
             </div>
+
+            <div class="plate-inventory-section">
+                <h2 class="section-title">Your Available Plates</h2>
+                <p class="section-description">Enter how many of each plate you own:</p>
+                
+                <div class="plate-inputs">
+                    <div class="plate-input-group">
+                        <label for="plate-45" class="plate-label">45 lb plates:</label>
+                        <input type="number" id="plate-45" class="plate-input" min="0" max="99" value="4" aria-describedby="plate-45-help">
+                        <span id="plate-45-help" class="plate-help">total</span>
+                    </div>
+                    
+                    <div class="plate-input-group">
+                        <label for="plate-25" class="plate-label">25 lb plates:</label>
+                        <input type="number" id="plate-25" class="plate-input" min="0" max="99" value="4" aria-describedby="plate-25-help">
+                        <span id="plate-25-help" class="plate-help">total</span>
+                    </div>
+                    
+                    <div class="plate-input-group">
+                        <label for="plate-15" class="plate-label">15 lb plates:</label>
+                        <input type="number" id="plate-15" class="plate-input" min="0" max="99" value="2" aria-describedby="plate-15-help">
+                        <span id="plate-15-help" class="plate-help">total</span>
+                    </div>
+                    
+                    <div class="plate-input-group">
+                        <label for="plate-10" class="plate-label">10 lb plates:</label>
+                        <input type="number" id="plate-10" class="plate-input" min="0" max="99" value="4" aria-describedby="plate-10-help">
+                        <span id="plate-10-help" class="plate-help">total</span>
+                    </div>
+                    
+                    <div class="plate-input-group">
+                        <label for="plate-5" class="plate-label">5 lb plates:</label>
+                        <input type="number" id="plate-5" class="plate-input" min="0" max="99" value="4" aria-describedby="plate-5-help">
+                        <span id="plate-5-help" class="plate-help">total</span>
+                    </div>
+                    
+                    <div class="plate-input-group">
+                        <label for="plate-2-5" class="plate-label">2.5 lb plates:</label>
+                        <input type="number" id="plate-2-5" class="plate-input" min="0" max="99" value="4" aria-describedby="plate-2-5-help">
+                        <span id="plate-2-5-help" class="plate-help">total</span>
+                    </div>
+                </div>
+                
+                <div id="plate-breakdown" class="plate-breakdown" role="status" aria-live="polite"></div>
+            </div>
         </main>
         
         <footer>
