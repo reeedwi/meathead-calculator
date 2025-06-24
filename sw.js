@@ -1,5 +1,5 @@
 // Service Worker for Meathead Calculator PWA
-const CACHE_NAME = 'meathead-calculator-v4';
+const CACHE_NAME = 'meathead-calculator-v5';
 
 // Get the base path from the service worker location
 const getBasePath = () => {
@@ -101,16 +101,9 @@ self.addEventListener('fetch', event => {
     
     event.respondWith(
         caches.match(event.request)
-            .then(response => {
-                // Return cached version if available
-                if (response) {
-                    console.log('Service Worker: Serving from cache', event.request.url);
-                    return response;
-                }
-                
-                // Otherwise fetch from network
-                console.log('Service Worker: Fetching from network', event.request.url);
-                return fetch(event.request)
+            .then(cachedResponse => {
+                // Always fetch from network to check for updates
+                const fetchPromise = fetch(event.request)
                     .then(response => {
                         // Don't cache non-successful responses
                         if (!response || response.status !== 200 || response.type !== 'basic') {
@@ -124,21 +117,24 @@ self.addEventListener('fetch', event => {
                         caches.open(CACHE_NAME)
                             .then(cache => {
                                 cache.put(event.request, responseToCache);
+                                console.log('Service Worker: Updated cache for', event.request.url);
                             });
                         
                         return response;
                     })
                     .catch(error => {
                         console.error('Service Worker: Fetch failed', error);
-                        
-                        // If it's a navigation request and we're offline, 
-                        // return the cached index.html
-                        if (event.request.mode === 'navigate') {
-                            return caches.match(basePath + '/index.html');
-                        }
-                        
                         throw error;
                     });
+                
+                // Return cached response immediately if available, otherwise wait for network
+                if (cachedResponse) {
+                    console.log('Service Worker: Serving from cache while updating', event.request.url);
+                    return cachedResponse;
+                } else {
+                    console.log('Service Worker: Fetching from network (no cache)', event.request.url);
+                    return fetchPromise;
+                }
             })
     );
 });

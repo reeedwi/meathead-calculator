@@ -318,6 +318,19 @@ if ('serviceWorker' in navigator) {
             .then(registration => {
                 console.log('SW registered successfully: ', registration);
                 console.log('SW scope: ', registration.scope);
+                
+                // Check for updates
+                registration.addEventListener('updatefound', () => {
+                    console.log('Service Worker update found');
+                    const newWorker = registration.installing;
+                    
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            // New content is available, show update notification
+                            showUpdateNotification();
+                        }
+                    });
+                });
             })
             .catch(registrationError => {
                 console.error('SW registration failed: ', registrationError);
@@ -325,6 +338,71 @@ if ('serviceWorker' in navigator) {
     });
 } else {
     console.log('Service Worker not supported');
+}
+
+// Function to show update notification
+function showUpdateNotification() {
+    // Create update notification
+    const notification = document.createElement('div');
+    notification.className = 'update-notification';
+    notification.innerHTML = `
+        <div class="update-content">
+            <span>New version available!</span>
+            <button onclick="location.reload()" class="update-btn">Refresh</button>
+        </div>
+    `;
+    
+    // Add styles
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #4CAF50;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 1000;
+        font-size: 14px;
+        animation: slideIn 0.3s ease-out;
+    `;
+    
+    // Add animation styles
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .update-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .update-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .update-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Auto-remove after 10 seconds
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 10000);
 }
 
 // Handle installation prompt for PWA
