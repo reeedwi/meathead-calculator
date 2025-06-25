@@ -30,76 +30,192 @@
         </header>
         
         <main>
-            <div class="calculator-section">
-                <label for="weight-input" class="input-label">Enter total barbell weight (lbs):</label>
-                <input 
-                    type="number" 
-                    id="weight-input" 
-                    class="weight-input" 
-                    min="45" 
-                    max="999" 
-                    step="1" 
-                    placeholder="225"
-                    aria-describedby="result-output error-message"
-                    autocomplete="off"
-                >
-                <div id="result-output" class="result-output" role="status" aria-live="polite">
-                    Enter a weight to see the calculation
+            <div class="calculator-grid">
+                <div class="calculator-section">
+                    <label for="weight-input" class="input-label">Enter total barbell weight (lbs):</label>
+                    <input 
+                        type="number" 
+                        id="weight-input" 
+                        class="weight-input" 
+                        min="45" 
+                        max="999" 
+                        step="1" 
+                        placeholder="225"
+                        aria-describedby="result-output error-message"
+                        autocomplete="off"
+                    >
+                    <div id="result-output" class="result-output" role="status" aria-live="polite">
+                        Enter a weight to see the calculation
+                    </div>
+                    <div id="plate-breakdown" class="plate-breakdown" role="status" aria-live="polite"></div>
+                    <div id="error-message" class="error-message" role="alert" aria-live="polite"></div>
                 </div>
-                <div id="error-message" class="error-message" role="alert" aria-live="polite"></div>
-            </div>
 
-            <div class="percentage-breakdown-section">
-                <h2 class="section-title">Percentage Breakdown</h2>
-                <p class="section-description">Quick reference for common percentage values:</p>
-                <div id="percentage-breakdown" class="percentage-breakdown" role="status" aria-live="polite">
-                    Enter a weight to see percentage breakdowns
+                <div class="bar-weight-calculator-section">
+                    <h2 class="section-title">How Much Is On This Bar?</h2>
+                    <p class="section-description">Select plates on one side to calculate total weight:</p>
+                    
+                    <div class="plate-selection-grid">
+                        <div class="plate-button-group" data-weight="55">
+                            <button class="plate-button" type="button" aria-label="Add 55 lb plate">
+                                <span class="plate-weight">55</span>
+                                <span class="plate-unit">lb</span>
+                            </button>
+                            <div class="plate-counter">
+                                <span class="plate-count">0</span>
+                                <button class="remove-plate" type="button" aria-label="Remove 55 lb plate" style="display: none;">−</button>
+                            </div>
+                        </div>
+                        
+                        <div class="plate-button-group" data-weight="45">
+                            <button class="plate-button" type="button" aria-label="Add 45 lb plate">
+                                <span class="plate-weight">45</span>
+                                <span class="plate-unit">lb</span>
+                            </button>
+                            <div class="plate-counter">
+                                <span class="plate-count">0</span>
+                                <button class="remove-plate" type="button" aria-label="Remove 45 lb plate" style="display: none;">−</button>
+                            </div>
+                        </div>
+                        
+                        <div class="plate-button-group" data-weight="35">
+                            <button class="plate-button" type="button" aria-label="Add 35 lb plate">
+                                <span class="plate-weight">35</span>
+                                <span class="plate-unit">lb</span>
+                            </button>
+                            <div class="plate-counter">
+                                <span class="plate-count">0</span>
+                                <button class="remove-plate" type="button" aria-label="Remove 35 lb plate" style="display: none;">−</button>
+                            </div>
+                        </div>
+                        
+                        <div class="plate-button-group" data-weight="25">
+                            <button class="plate-button" type="button" aria-label="Add 25 lb plate">
+                                <span class="plate-weight">25</span>
+                                <span class="plate-unit">lb</span>
+                            </button>
+                            <div class="plate-counter">
+                                <span class="plate-count">0</span>
+                                <button class="remove-plate" type="button" aria-label="Remove 25 lb plate" style="display: none;">−</button>
+                            </div>
+                        </div>
+                        
+                        <div class="plate-button-group" data-weight="15">
+                            <button class="plate-button" type="button" aria-label="Add 15 lb plate">
+                                <span class="plate-weight">15</span>
+                                <span class="plate-unit">lb</span>
+                            </button>
+                            <div class="plate-counter">
+                                <span class="plate-count">0</span>
+                                <button class="remove-plate" type="button" aria-label="Remove 15 lb plate" style="display: none;">−</button>
+                            </div>
+                        </div>
+                        
+                        <div class="plate-button-group" data-weight="10">
+                            <button class="plate-button" type="button" aria-label="Add 10 lb plate">
+                                <span class="plate-weight">10</span>
+                                <span class="plate-unit">lb</span>
+                            </button>
+                            <div class="plate-counter">
+                                <span class="plate-count">0</span>
+                                <button class="remove-plate" type="button" aria-label="Remove 10 lb plate" style="display: none;">−</button>
+                            </div>
+                        </div>
+                        
+                        <div class="plate-button-group" data-weight="5">
+                            <button class="plate-button" type="button" aria-label="Add 5 lb plate">
+                                <span class="plate-weight">5</span>
+                                <span class="plate-unit">lb</span>
+                            </button>
+                            <div class="plate-counter">
+                                <span class="plate-count">0</span>
+                                <button class="remove-plate" type="button" aria-label="Remove 5 lb plate" style="display: none;">−</button>
+                            </div>
+                        </div>
+                        
+                        <div class="plate-button-group" data-weight="2.5">
+                            <button class="plate-button" type="button" aria-label="Add 2.5 lb plate">
+                                <span class="plate-weight">2.5</span>
+                                <span class="plate-unit">lb</span>
+                            </button>
+                            <div class="plate-counter">
+                                <span class="plate-count">0</span>
+                                <button class="remove-plate" type="button" aria-label="Remove 2.5 lb plate" style="display: none;">−</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bar-weight-result">
+                        <div class="bar-weight-display">
+                            <span class="bar-weight-label">Total weight on bar:</span>
+                            <span class="bar-weight-value">45 lbs</span>
+                        </div>
+                        <button class="reset-bar-weight" type="button" aria-label="Reset all plates">Reset</button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="plate-inventory-section">
-                <h2 class="section-title">Your Available Plates</h2>
-                <p class="section-description">Enter how many of each plate you own:</p>
-                
-                <div class="plate-inputs">
-                    <div class="plate-input-group">
-                        <label for="plate-45" class="plate-label">45 lb plates:</label>
-                        <input type="number" id="plate-45" class="plate-input" min="0" max="99" value="4" aria-describedby="plate-45-help">
-                        <span id="plate-45-help" class="plate-help">total</span>
-                    </div>
-                    
-                    <div class="plate-input-group">
-                        <label for="plate-25" class="plate-label">25 lb plates:</label>
-                        <input type="number" id="plate-25" class="plate-input" min="0" max="99" value="4" aria-describedby="plate-25-help">
-                        <span id="plate-25-help" class="plate-help">total</span>
-                    </div>
-                    
-                    <div class="plate-input-group">
-                        <label for="plate-15" class="plate-label">15 lb plates:</label>
-                        <input type="number" id="plate-15" class="plate-input" min="0" max="99" value="2" aria-describedby="plate-15-help">
-                        <span id="plate-15-help" class="plate-help">total</span>
-                    </div>
-                    
-                    <div class="plate-input-group">
-                        <label for="plate-10" class="plate-label">10 lb plates:</label>
-                        <input type="number" id="plate-10" class="plate-input" min="0" max="99" value="4" aria-describedby="plate-10-help">
-                        <span id="plate-10-help" class="plate-help">total</span>
-                    </div>
-                    
-                    <div class="plate-input-group">
-                        <label for="plate-5" class="plate-label">5 lb plates:</label>
-                        <input type="number" id="plate-5" class="plate-input" min="0" max="99" value="4" aria-describedby="plate-5-help">
-                        <span id="plate-5-help" class="plate-help">total</span>
-                    </div>
-                    
-                    <div class="plate-input-group">
-                        <label for="plate-2-5" class="plate-label">2.5 lb plates:</label>
-                        <input type="number" id="plate-2-5" class="plate-input" min="0" max="99" value="4" aria-describedby="plate-2-5-help">
-                        <span id="plate-2-5-help" class="plate-help">total</span>
+                <div class="percentage-breakdown-section">
+                    <h2 class="section-title">Percentage Breakdown</h2>
+                    <p class="section-description">Quick reference for common percentage values:</p>
+                    <div id="percentage-breakdown" class="percentage-breakdown" role="status" aria-live="polite">
+                        Enter a weight to see percentage breakdowns
                     </div>
                 </div>
-                
-                <div id="plate-breakdown" class="plate-breakdown" role="status" aria-live="polite"></div>
+
+                <div class="plate-inventory-section">
+                    <h2 class="section-title">Your Available Plates</h2>
+                    <p class="section-description">Enter how many of each plate you own:</p>
+                    
+                    <div class="plate-inputs">
+                        <div class="plate-input-group">
+                            <label for="plate-55" class="plate-label">55 lb plates:</label>
+                            <input type="number" id="plate-55" class="plate-input" min="0" max="99" value="0" aria-describedby="plate-55-help">
+                            <span id="plate-55-help" class="plate-help">total</span>
+                        </div>
+                        
+                        <div class="plate-input-group">
+                            <label for="plate-45" class="plate-label">45 lb plates:</label>
+                            <input type="number" id="plate-45" class="plate-input" min="0" max="99" value="4" aria-describedby="plate-45-help">
+                            <span id="plate-45-help" class="plate-help">total</span>
+                        </div>
+                        
+                        <div class="plate-input-group">
+                            <label for="plate-35" class="plate-label">35 lb plates:</label>
+                            <input type="number" id="plate-35" class="plate-input" min="0" max="99" value="0" aria-describedby="plate-35-help">
+                            <span id="plate-35-help" class="plate-help">total</span>
+                        </div>
+                        
+                        <div class="plate-input-group">
+                            <label for="plate-25" class="plate-label">25 lb plates:</label>
+                            <input type="number" id="plate-25" class="plate-input" min="0" max="99" value="4" aria-describedby="plate-25-help">
+                            <span id="plate-25-help" class="plate-help">total</span>
+                        </div>
+                        
+                        <div class="plate-input-group">
+                            <label for="plate-15" class="plate-label">15 lb plates:</label>
+                            <input type="number" id="plate-15" class="plate-input" min="0" max="99" value="2" aria-describedby="plate-15-help">
+                            <span id="plate-15-help" class="plate-help">total</span>
+                        </div>
+                        
+                        <div class="plate-input-group">
+                            <label for="plate-10" class="plate-label">10 lb plates:</label>
+                            <input type="number" id="plate-10" class="plate-input" min="0" max="99" value="4" aria-describedby="plate-10-help">
+                            <span id="plate-10-help" class="plate-help">total</span>
+                        </div>
+                        
+                        <div class="plate-input-group">
+                            <label for="plate-5" class="plate-label">5 lb plates:</label>
+                            <input type="number" id="plate-5" class="plate-input" min="0" max="99" value="4" aria-describedby="plate-5-help">
+                            <span id="plate-5-help" class="plate-help">total</span>
+                        </div>
+                        
+                        <div class="plate-input-group">
+                            <label for="plate-2-5" class="plate-label">2.5 lb plates:</label>
+                            <input type="number" id="plate-2-5" class="plate-input" min="0" max="99" value="4" aria-describedby="plate-2-5-help">
+                            <span id="plate-2-5-help" class="plate-help">total</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
         

@@ -214,3 +214,60 @@ Allow users to click any percentage breakdown box to set the main input to that 
 - Sees: `85% of 400 = 340`
 - Clicks the `340` box
 - Input changes to `340`, all outputs update to reflect calculations for `340`
+
+## **New Feature: "How Much Is on the Bar Right Now?"**
+
+### **Overview**
+
+Introduce a new section within the calculator titled "How much is on the bar rn?" This feature is designed to calculate the total weight on a barbell by allowing users to input weight plates on one side. The feature will then calculate and display the total weight including the bar.
+
+### **Problem Statement**
+
+Users often need to quickly calculate the total weight on a barbell based on the plates they've loaded, especially when they want to verify their current working weight or when transitioning between exercises.
+
+### **Objective**
+
+Provide a quick, intuitive way for users to calculate total barbell weight by selecting plates they've loaded on one side of the bar.
+
+### **Functional Requirements**
+
+**Calculation Logic:**
+- User inputs weight plates for one side of the bar
+- System doubles the sum of these plate values to account for both sides
+- Then adds 45 lbs to account for the bar itself
+- Formula: `Total = (Sum of plates on one side × 2) + 45 lbs`
+
+**Plate Selection:**
+- Display buttons for plate weights: 55 lb, 45 lb, 35 lb, 25 lb, 15 lb, 10 lb, 5 lb, 2.5 lb
+- Each button press adds the corresponding weight to the one-side total
+- Interface updates total bar weight automatically
+- Visual counter shows how many of each plate has been selected
+
+**Plate Removal:**
+- Allow users to remove individual plates with a "remove" action or "-" button
+- Provide a clear/reset button to remove all plates and reset to 45 lb bar weight
+
+**UI Requirements:**
+- New section with clear title "How much is on the bar rn?"
+- Real-time calculation display
+- Visual feedback for selected plates
+- Responsive design matching existing calculator aesthetic
+
+### **Non-Functional Requirements**
+
+- **Performance:** Instant calculation updates with no noticeable delay
+- **Accessibility:** Keyboard navigation and screen reader support
+- **Mobile-friendly:** Touch-optimized buttons and counters
+- **Consistency:** Matches existing design patterns and color scheme
+
+### **Example Calculations**
+
+- **User selects:** 1 × 25 lb plate → Total = (25 × 2) + 45 = **95 lbs**
+- **User selects:** 2 × 25 lb plates → Total = (25 + 25) × 2 + 45 = **145 lbs**
+- **User selects:** 1 × 45 lb + 1 × 25 lb → Total = (45 + 25) × 2 + 45 = **185 lbs**
+
+### **Scope & Impact**
+
+- This is a new section of the calculator and does not impact any existing calculation logic
+- Designed for quick, one-tap plate selection and real-time feedback
+- Can be built independently and modularly from other calculator tools in the interface

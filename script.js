@@ -10,7 +10,9 @@ class MeatheadCalculator {
         
         // Plate inventory inputs
         this.plateInputs = {
+            '55': document.getElementById('plate-55'),
             '45': document.getElementById('plate-45'),
+            '35': document.getElementById('plate-35'),
             '25': document.getElementById('plate-25'),
             '15': document.getElementById('plate-15'),
             '10': document.getElementById('plate-10'),
@@ -19,7 +21,7 @@ class MeatheadCalculator {
         };
         
         // Standard plate weights in descending order
-        this.plateWeights = [45, 25, 15, 10, 5, 2.5];
+        this.plateWeights = [55, 45, 35, 25, 15, 10, 5, 2.5];
         
         // Percentage breakdown values (95% to 50% in 5% increments)
         this.percentageValues = [95, 90, 85, 80, 75, 70, 65, 60, 55, 50];
@@ -426,6 +428,18 @@ class MeatheadCalculator {
 // Initialize calculator (DOM is guaranteed ready by dynamic loader)
 new MeatheadCalculator();
 
+// Initialize bar weight calculator with a small delay to ensure DOM is ready
+setTimeout(() => {
+    initializeBarWeightCalculator();
+}, 100);
+
+// Also try to initialize when DOM is fully loaded as a fallback
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(initializeBarWeightCalculator, 50);
+    });
+}
+
 // Register service worker for PWA functionality
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -536,4 +550,136 @@ window.addEventListener('beforeinstallprompt', (e) => {
 // Handle successful installation
 window.addEventListener('appinstalled', (evt) => {
     console.log('App was installed successfully');
-}); 
+});
+
+// Bar weight calculator functionality
+let plateCounts = {
+    55: 0,
+    45: 0,
+    35: 0,
+    25: 0,
+    15: 0,
+    10: 0,
+    5: 0,
+    2.5: 0
+};
+
+let barWeightCalculatorInitialized = false;
+
+function initializeBarWeightCalculator() {
+    if (barWeightCalculatorInitialized) {
+        console.log('Bar weight calculator already initialized, skipping...');
+        return;
+    }
+    
+    console.log('Initializing bar weight calculator...');
+    
+    // Add event listeners to plate buttons
+    const plateButtons = document.querySelectorAll('.plate-button');
+    console.log('Found plate buttons:', plateButtons.length);
+    
+    plateButtons.forEach(button => {
+        button.addEventListener('click', addPlate);
+        console.log('Added click listener to plate button:', button.textContent);
+    });
+
+    // Add event listeners to remove buttons
+    const removeButtons = document.querySelectorAll('.remove-plate');
+    console.log('Found remove buttons:', removeButtons.length);
+    
+    removeButtons.forEach(button => {
+        button.addEventListener('click', removePlate);
+        console.log('Added click listener to remove button');
+    });
+
+    // Add event listener to reset button
+    const resetButton = document.querySelector('.reset-bar-weight');
+    if (resetButton) {
+        resetButton.addEventListener('click', resetBarWeight);
+        console.log('Added click listener to reset button');
+    } else {
+        console.log('Reset button not found');
+    }
+
+    // Initialize the display
+    updateBarWeightDisplay();
+    barWeightCalculatorInitialized = true;
+    console.log('Bar weight calculator initialization complete');
+}
+
+function addPlate(event) {
+    console.log('addPlate function called');
+    const button = event.currentTarget;
+    const plateGroup = button.closest('.plate-button-group');
+    const weight = parseFloat(plateGroup.dataset.weight);
+    
+    console.log('Adding plate with weight:', weight);
+    plateCounts[weight]++;
+    updatePlateCounter(plateGroup, weight);
+    updateBarWeightDisplay();
+    console.log('Plate added, new count:', plateCounts[weight]);
+}
+
+function removePlate(event) {
+    const button = event.currentTarget;
+    const plateGroup = button.closest('.plate-button-group');
+    const weight = parseFloat(plateGroup.dataset.weight);
+    
+    if (plateCounts[weight] > 0) {
+        plateCounts[weight]--;
+        updatePlateCounter(plateGroup, weight);
+        updateBarWeightDisplay();
+    }
+}
+
+function updatePlateCounter(plateGroup, weight) {
+    const countElement = plateGroup.querySelector('.plate-count');
+    const removeButton = plateGroup.querySelector('.remove-plate');
+    
+    countElement.textContent = plateCounts[weight];
+    
+    if (plateCounts[weight] > 0) {
+        removeButton.style.display = 'flex';
+    } else {
+        removeButton.style.display = 'none';
+    }
+}
+
+function calculateBarWeight() {
+    let totalPlatesWeight = 0;
+    
+    // Calculate total weight of plates on one side
+    for (const [weight, count] of Object.entries(plateCounts)) {
+        totalPlatesWeight += parseFloat(weight) * count;
+    }
+    
+    // Double the weight for both sides and add bar weight (45 lbs)
+    const totalWeight = (totalPlatesWeight * 2) + 45;
+    
+    return totalWeight;
+}
+
+function updateBarWeightDisplay() {
+    const totalWeight = calculateBarWeight();
+    const weightDisplay = document.querySelector('.bar-weight-value');
+    
+    if (weightDisplay) {
+        weightDisplay.textContent = `${totalWeight} lbs`;
+    }
+}
+
+function resetBarWeight() {
+    // Reset all plate counts
+    for (const weight in plateCounts) {
+        plateCounts[weight] = 0;
+    }
+    
+    // Update all counters
+    document.querySelectorAll('.plate-button-group').forEach(group => {
+        const weight = parseFloat(group.dataset.weight);
+        updatePlateCounter(group, weight);
+    });
+    
+    // Update display
+    updateBarWeightDisplay();
+} 
