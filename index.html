@@ -21,7 +21,7 @@
     <link rel="manifest" href="manifest.json">
     
     <!-- Styles -->
-    <link rel="stylesheet" href="styles.css">
+    <!-- <link rel="stylesheet" href="styles.css"> -->
 </head>
 <body>
     <div class="container">
@@ -114,6 +114,16 @@
         </footer>
     </div>
     
-    <script src="script.js?v=1.0.3"></script>
+    <script>
+      const ts = Date.now();
+      const css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = 'styles.css?v=' + ts;
+      document.head.appendChild(css);
+
+      const js = document.createElement('script');
+      js.src = 'script.js?v=' + ts;
+      document.body.appendChild(js);
+    </script>
 </body>
 </html> 

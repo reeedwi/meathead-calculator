@@ -24,6 +24,7 @@ class MeatheadCalculator {
         // Percentage breakdown values (95% to 50% in 5% increments)
         this.percentageValues = [95, 90, 85, 80, 75, 70, 65, 60, 55, 50];
         
+        this.loadPlateInventory();
         this.init();
     }
     
@@ -101,6 +102,7 @@ class MeatheadCalculator {
             event.target.value = cleanedValue.slice(0, 2);
         }
         
+        this.savePlateInventory();
         this.updateDisplay();
     }
     
@@ -392,6 +394,32 @@ class MeatheadCalculator {
     clearError() {
         this.errorMessage.textContent = '';
         this.errorMessage.removeAttribute('aria-label');
+    }
+
+    // Save plate inventory to localStorage
+    savePlateInventory() {
+        const inventory = {};
+        Object.entries(this.plateInputs).forEach(([weight, input]) => {
+            inventory[weight] = input.value;
+        });
+        localStorage.setItem('meathead_plate_inventory', JSON.stringify(inventory));
+    }
+
+    // Load plate inventory from localStorage
+    loadPlateInventory() {
+        const saved = localStorage.getItem('meathead_plate_inventory');
+        if (saved) {
+            try {
+                const inventory = JSON.parse(saved);
+                Object.entries(this.plateInputs).forEach(([weight, input]) => {
+                    if (inventory[weight] !== undefined) {
+                        input.value = inventory[weight];
+                    }
+                });
+            } catch (e) {
+                // Ignore parse errors
+            }
+        }
     }
 }
 
