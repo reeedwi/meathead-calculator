@@ -5,6 +5,7 @@ class MeatheadCalculator {
         this.resultOutput = document.getElementById('result-output');
         this.errorMessage = document.getElementById('error-message');
         this.plateBreakdown = document.getElementById('plate-breakdown');
+        this.percentageBreakdown = document.getElementById('percentage-breakdown');
         this.barWeight = 45; // Standard Olympic barbell weight
         
         // Plate inventory inputs
@@ -19,6 +20,9 @@ class MeatheadCalculator {
         
         // Standard plate weights in descending order
         this.plateWeights = [45, 25, 15, 10, 5, 2.5];
+        
+        // Percentage breakdown values (95% to 50% in 5% increments)
+        this.percentageValues = [95, 90, 85, 80, 75, 70, 65, 60, 55, 50];
         
         this.init();
     }
@@ -167,6 +171,7 @@ class MeatheadCalculator {
         if (!inputValue) {
             this.showEmptyState();
             this.showEmptyPlateBreakdown();
+            this.showEmptyPercentageBreakdown();
             return;
         }
         
@@ -176,18 +181,21 @@ class MeatheadCalculator {
         if (isNaN(totalWeight) || totalWeight < 0) {
             this.showError('Please enter a valid weight.');
             this.showEmptyPlateBreakdown();
+            this.showEmptyPercentageBreakdown();
             return;
         }
         
         if (totalWeight > 999) {
             this.showError('Weight cannot exceed 999 lbs.');
             this.showEmptyPlateBreakdown();
+            this.showEmptyPercentageBreakdown();
             return;
         }
         
         if (totalWeight < this.barWeight) {
             this.showError(`Weight must be at least ${this.barWeight} lbs (the weight of the bar).`);
             this.showEmptyPlateBreakdown();
+            this.showEmptyPercentageBreakdown();
             return;
         }
         
@@ -210,6 +218,9 @@ class MeatheadCalculator {
         
         // Calculate and show plate breakdown
         this.updatePlateBreakdown(sideWeight);
+        
+        // Calculate and show percentage breakdown
+        this.updatePercentageBreakdown(totalWeight);
     }
     
     updatePlateBreakdown(targetWeight) {
@@ -231,6 +242,79 @@ class MeatheadCalculator {
                 this.showPlateBreakdownError(`Unable to make ${targetWeight.toFixed(1)} lbs with your available plates.`);
             }
         }
+    }
+    
+    updatePercentageBreakdown(totalWeight) {
+        const percentages = this.calculatePercentages(totalWeight);
+        this.showPercentageBreakdown(percentages);
+    }
+    
+    calculatePercentages(totalWeight) {
+        const percentages = [];
+        
+        for (const percentage of this.percentageValues) {
+            const value = (totalWeight * percentage) / 100;
+            const roundedValue = Math.round(value * 100) / 100; // Round to 2 decimal places
+            
+            percentages.push({
+                percentage: percentage,
+                value: roundedValue,
+                label: `${percentage}% of ${totalWeight}`,
+                displayValue: roundedValue.toFixed(2)
+            });
+        }
+        
+        return percentages;
+    }
+    
+    showPercentageBreakdown(percentages) {
+        const content = document.createElement('div');
+        content.className = 'percentage-breakdown-content';
+        
+        percentages.forEach(item => {
+            // Use button for accessibility
+            const percentageItem = document.createElement('button');
+            percentageItem.className = 'percentage-item';
+            percentageItem.type = 'button';
+            percentageItem.setAttribute('tabindex', '0');
+            percentageItem.setAttribute('aria-label', `${item.label} is ${item.displayValue} lbs. Click to use this value.`);
+            percentageItem.title = `Click to use ${item.displayValue} lbs as your input`;
+            
+            // Set up click handler
+            percentageItem.addEventListener('click', () => {
+                this.weightInput.value = item.displayValue;
+                this.updateDisplay();
+                this.weightInput.focus();
+            });
+            
+            // Keyboard accessibility (Enter/Space)
+            percentageItem.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    percentageItem.click();
+                }
+            });
+            
+            const label = document.createElement('span');
+            label.className = 'percentage-label';
+            label.textContent = item.label;
+            
+            const value = document.createElement('span');
+            value.className = 'percentage-value';
+            value.textContent = `= ${item.displayValue} lbs`;
+            
+            percentageItem.appendChild(label);
+            percentageItem.appendChild(value);
+            content.appendChild(percentageItem);
+        });
+        
+        // Clear existing content
+        this.percentageBreakdown.innerHTML = '';
+        this.percentageBreakdown.appendChild(content);
+        
+        // Update classes and accessibility
+        this.percentageBreakdown.classList.remove('empty');
+        this.percentageBreakdown.setAttribute('aria-label', `Percentage breakdown for ${percentages[0]?.value ? Math.round(percentages[0].value) : 0} lbs total weight`);
     }
     
     showResult(message) {
@@ -263,6 +347,12 @@ class MeatheadCalculator {
         this.plateBreakdown.classList.add('empty');
         this.plateBreakdown.classList.remove('error');
         this.plateBreakdown.setAttribute('aria-label', 'No plate breakdown yet. Enter a weight to see suggestions.');
+    }
+    
+    showEmptyPercentageBreakdown() {
+        this.percentageBreakdown.textContent = 'Enter a weight to see percentage breakdowns';
+        this.percentageBreakdown.classList.add('empty');
+        this.percentageBreakdown.setAttribute('aria-label', 'No percentage breakdown yet. Enter a weight to see breakdowns.');
     }
     
     showError(message) {

@@ -31,12 +31,6 @@
         
         <main>
             <div class="calculator-section">
-                <div id="result-output" class="result-output" role="status" aria-live="polite">
-                    Enter a weight to see the calculation
-                </div>
-                
-                <div id="error-message" class="error-message" role="alert" aria-live="polite"></div>
-                
                 <label for="weight-input" class="input-label">Enter total barbell weight (lbs):</label>
                 <input 
                     type="number" 
@@ -49,6 +43,18 @@
                     aria-describedby="result-output error-message"
                     autocomplete="off"
                 >
+                <div id="result-output" class="result-output" role="status" aria-live="polite">
+                    Enter a weight to see the calculation
+                </div>
+                <div id="error-message" class="error-message" role="alert" aria-live="polite"></div>
+            </div>
+
+            <div class="percentage-breakdown-section">
+                <h2 class="section-title">Percentage Breakdown</h2>
+                <p class="section-description">Quick reference for common percentage values:</p>
+                <div id="percentage-breakdown" class="percentage-breakdown" role="status" aria-live="polite">
+                    Enter a weight to see percentage breakdowns
+                </div>
             </div>
 
             <div class="plate-inventory-section">
@@ -108,6 +114,6 @@
         </footer>
     </div>
     
-    <script src="script.js?v=1.0.1"></script>
+    <script src="script.js?v=1.0.3"></script>
 </body>
 </html> 

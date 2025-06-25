@@ -18,10 +18,17 @@ body {
 }
 
 .container {
-    max-width: 600px;
+    max-width: 1200px;
     width: 100%;
     text-align: center;
     padding: 2rem;
+}
+
+/* Main content layout */
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
 
 /* Header styles */
@@ -46,6 +53,9 @@ body {
 /* Calculator section */
 .calculator-section {
     margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .input-label {
@@ -66,8 +76,15 @@ body {
     background-color: #ffffff;
     color: #000000;
     border-radius: 8px;
-    margin-bottom: 0;
+    margin-bottom: 2.2rem;
     transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .weight-input:focus {
@@ -105,6 +122,7 @@ body {
     font-size: clamp(1.5rem, 5vw, 2.5rem);
     font-weight: 900;
     margin-bottom: 1.5rem;
+    margin-top: 1.2rem;
     padding: 1.5rem;
     border: 3px solid #000000;
     border-radius: 8px;
@@ -123,6 +141,86 @@ body {
     color: rgba(0, 0, 0, 0.5);
     font-weight: 400;
     font-size: clamp(1.1rem, 3vw, 1.4rem);
+}
+
+/* Percentage breakdown section */
+.percentage-breakdown-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 2px solid #000000;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+}
+
+.percentage-breakdown {
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    font-weight: 600;
+    padding: 1rem;
+    border: 2px solid #000000;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #000000;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.percentage-breakdown.empty {
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: 400;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+}
+
+.percentage-breakdown-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.percentage-item {
+    padding: 0.5rem;
+    border: 1.5px solid #000000;
+    border-radius: 8px;
+    background-color: #ffffff;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: box-shadow 0.15s, border-color 0.15s, background 0.15s;
+    outline: none;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.percentage-item:hover,
+.percentage-item:focus {
+    border-color: #0070f3;
+    background: #f0f8ff;
+    box-shadow: 0 0 0 2px #0070f355;
+}
+
+.percentage-item:active {
+    background: #e6f0fa;
+    border-color: #005bb5;
+}
+
+.percentage-label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.percentage-value {
+    display: block;
+    font-weight: 400;
+    opacity: 0.8;
 }
 
 /* Plate inventory section */
@@ -177,6 +275,11 @@ body {
     color: #000000;
     border-radius: 6px;
     transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
 }
 
 .plate-input:focus {
@@ -219,31 +322,43 @@ body {
 
 /* Footer */
 .footer-text {
-    font-size: clamp(0.9rem, 2.5vw, 1rem);
-    opacity: 0.6;
-    font-weight: 400;
-    margin-top: 2rem;
+    margin-top: 2.5rem !important;
+    opacity: 0.5;
+    font-size: 0.95rem;
+}
+
+footer {
+    margin-top: 3rem;
+    padding-bottom: 2rem;
 }
 
 /* Responsive design */
 @media (max-width: 480px) {
     .container {
         padding: 1rem;
+        max-width: 100%;
+    }
+    
+    main {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
     }
     
     .title {
+        font-size: 2.5rem;
         margin-bottom: 1.5rem;
     }
     
     .weight-input {
         height: 70px;
-        max-width: 250px;
+        font-size: 1.8rem;
     }
     
     .result-output {
-        min-height: 100px;
+        font-size: 1.8rem;
         padding: 1rem;
-        margin-bottom: 1rem;
+        min-height: 100px;
     }
     
     .calculator-section {
@@ -263,11 +378,32 @@ body {
     .plate-input {
         width: 70px;
         height: 45px;
+        font-size: 1rem;
     }
     
     .plate-breakdown {
-        min-height: 50px;
+        font-size: 1rem;
         padding: 0.75rem;
+    }
+    
+    .percentage-breakdown-section {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .percentage-breakdown {
+        font-size: 1rem;
+        padding: 0.75rem;
+    }
+    
+    .percentage-breakdown-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+    
+    .percentage-item {
+        padding: 0.4rem;
+        font-size: 0.9rem;
     }
 }
 
@@ -330,5 +466,95 @@ body {
     .container {
         max-width: none;
         padding: 0;
+    }
+}
+
+/* Desktop layout - side by side sections */
+@media (min-width: 768px) {
+    main {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: 
+            "calculator calculator"
+            "percentage plates";
+        gap: 2rem;
+        align-items: start;
+    }
+    
+    .calculator-section {
+        grid-area: calculator;
+        margin-bottom: 0;
+    }
+    
+    .percentage-breakdown-section {
+        grid-area: percentage;
+        margin-bottom: 0;
+    }
+    
+    .plate-inventory-section {
+        grid-area: plates;
+        margin-bottom: 0;
+    }
+    
+    .percentage-breakdown-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.6rem;
+    }
+}
+
+/* Large desktop layout - three columns */
+@media (min-width: 1200px) {
+    main {
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-areas: 
+            "calculator calculator calculator"
+            "percentage plates plates";
+        gap: 2.5rem;
+    }
+    
+    .container {
+        max-width: 1400px;
+        padding: 2.5rem;
+    }
+    
+    .percentage-breakdown-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+}
+
+/* Medium screen layout - tablets and smaller desktops */
+@media (min-width: 481px) and (max-width: 767px) {
+    .container {
+        max-width: 800px;
+        padding: 1.5rem;
+    }
+    
+    main {
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
+    }
+    
+    .calculator-section {
+        margin-bottom: 1.75rem;
+    }
+    
+    .percentage-breakdown-section {
+        margin-bottom: 1.75rem;
+    }
+    
+    .plate-inventory-section {
+        margin-bottom: 1.75rem;
+    }
+    
+    .percentage-breakdown-content {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.6rem;
+    }
+    
+    .plate-inputs {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
     }
 } 
