@@ -258,13 +258,31 @@ class MeatheadCalculator {
         
         for (const percentage of this.percentageValues) {
             const value = (totalWeight * percentage) / 100;
-            const roundedValue = Math.round(value * 100) / 100; // Round to 2 decimal places
+            
+            // Round to nearest 5 or 10 pounds for practical plate loading
+            // This makes the math much easier since you can't load fractional weights
+            let roundedValue;
+            const remainder = value % 10;
+            
+            if (remainder <= 2.5) {
+                // Round down to nearest 10
+                roundedValue = Math.floor(value / 10) * 10;
+            } else if (remainder <= 7.5) {
+                // Round to nearest 5
+                roundedValue = Math.round(value / 5) * 5;
+            } else {
+                // Round up to nearest 10
+                roundedValue = Math.ceil(value / 10) * 10;
+            }
+            
+            // Ensure we don't go below the bar weight
+            roundedValue = Math.max(roundedValue, this.barWeight);
             
             percentages.push({
                 percentage: percentage,
                 value: roundedValue,
                 label: `${percentage}% of ${totalWeight}`,
-                displayValue: roundedValue.toFixed(2)
+                displayValue: roundedValue.toString()
             });
         }
         
