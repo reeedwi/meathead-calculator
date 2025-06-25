@@ -423,10 +423,8 @@ class MeatheadCalculator {
     }
 }
 
-// Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    new MeatheadCalculator();
-});
+// Initialize calculator (DOM is guaranteed ready by dynamic loader)
+new MeatheadCalculator();
 
 // Register service worker for PWA functionality
 if ('serviceWorker' in navigator) {

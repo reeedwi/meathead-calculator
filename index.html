@@ -121,9 +121,21 @@
       css.href = 'styles.css?v=' + ts;
       document.head.appendChild(css);
 
-      const js = document.createElement('script');
-      js.src = 'script.js?v=' + ts;
-      document.body.appendChild(js);
+      function loadScriptWhenReady() {
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', injectScript);
+        } else {
+          injectScript();
+        }
+      }
+
+      function injectScript() {
+        const js = document.createElement('script');
+        js.src = 'script.js?v=' + ts;
+        document.body.appendChild(js);
+      }
+
+      loadScriptWhenReady();
     </script>
 </body>
 </html> 
